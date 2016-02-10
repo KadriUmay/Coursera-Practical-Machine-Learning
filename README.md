@@ -24,3 +24,6 @@ The test data are available here:
 * https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. They have been very generous in allowing their data to be used for this kind of assignment. 
+
+# The Course Project can be found here in RPubs
+* http://rpubs.com/kadriu/PMLCourseProject

@@ -78,14 +78,22 @@ RawTestData <- RawTestData[, colSums(is.na(RawTestData)) == 0]
 # $cvtd_timestamp:Factor w / 20 levels "02/12/2011 13:32", ..:9 9 9 9 9 9 9 9 9 9 ...
 # $new_window:Factor w / 2 levels "no", "yes":1 1 1 1 1 1 1 1 1 1 ...
 #$ num_window:int 11 11 11 12 12 12 12 12 12 12 ...
+classe <- RawTrainData$classe
 TrainColsToRemove <- grepl("^X|user_name|timestamp|window", names(RawTrainData))
 RawTrainData <- RawTrainData[, !TrainColsToRemove]
+CleanTrainData <- RawTrainData[, sapply(RawTrainData, is.numeric)]
+CleanTrainData$classe <- classe
+
+classe <- RawTestData$classe
 TestColsToRemove <- grepl("^X|user_name|timestamp|window", names(RawTestData))
 RawTestData <- RawTestData[, !TestColsToRemove]
+CleanTestData <- RawTestData[, sapply(RawTestData, is.numeric)]
+CleanTrainData$classe <- classe
+
 
 #check the rows of data which has complete cases again
 #Training Dataset
-sum(complete.cases(RawTrainData)) #19622 We do now have complete cases for all training data
+sum(complete.cases(CleanTrainData)) #19622 We do now have complete cases for all training data
 #Test Dataset
 sum(complete.cases(RawTestData)) #20 We do now have complete cases for all test data
 
@@ -95,9 +103,9 @@ set.seed(562389) #for reproducible results
 #We would like to the validate the model with a subset of the data before applying the test data
 #This is to avoid overfitting
 #Generate a training and validation dataset
-TrainIdx <- createDataPartition(RawTrainData$classe, p = 0.7, list = FALSE)
-TrainData <- RawTrainData[TrainIdx,]
-TestData <- RawTrainData[ - TrainIdx,]
+TrainIdx <- createDataPartition(CleanTrainData$classe, p = 0.7, list = FALSE)
+TrainData <- CleanTrainData[TrainIdx,]
+TestData <- CleanTrainData[ - TrainIdx,]
 
 #Data Modelling
 #We will test several algorithms and compare their accuracy levels
@@ -155,7 +163,7 @@ OutputTable
 #By far random forest is the most acurate one
 #We need to test the accuracy with the validation dataset
 #Test for overfitting
-predRf<-predict(modelRf,RawTestData)
+predRf<-predict(modelRf,CleanTestData)
 
 #Correlation Plot between different attributes of the model
 #The graph is not readable but gives an idea on the 

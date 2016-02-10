@@ -1,3 +1,4 @@
+setwd("c://users//kadriu//documents//GitHub//Coursera-Practical-Machine-Learning")
 writefiles <- function(x){
   n = length(x)
   for(i in 1:n){
